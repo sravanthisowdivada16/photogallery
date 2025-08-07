@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabbed Photo Gallery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 2em;
+      letter-spacing: 1px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #333;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      padding: 15px 30px;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    nav button:hover,
+    nav button.active {
+      background-color: #ff9800;
+      color: #000;
+    }
+
+    .gallery {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .gallery.active {
+      display: grid;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .gallery img:hover {
+      transform: scale(1.03);
+    }
+
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    .lightbox .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      nav button {
+        padding: 10px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>Photo Gallery</header>
+
+  <nav>
+    <button class="tab active" onclick="showGallery('nature')">Nature</button>
+    <button class="tab" onclick="showGallery('architecture')">Architecture</button>
+    <button class="tab" onclick="showGallery('animals')">Animals</button>
+  </nav>
+
+  <!-- Nature Gallery -->
+  <div class="gallery active" id="nature">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Nature 1">
+    <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=800&q=80" alt="Nature 2">
+    <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80" alt="Nature 3">
+  </div>
+
+  <!-- Architecture Gallery (Updated URLs) -->
+  <div class="gallery" id="architecture">
+    <img src="https://images.unsplash.com/photo-1599423300746-b62533397364?auto=format&fit=crop&w=800&q=80" alt="Modern Skyscraper">
+    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80" alt="Interior Design">
+    <img src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=80" alt="Architecture Detail">
+  </div>
+
+  <!-- Animals Gallery -->
+  <div class="gallery" id="animals">
+    <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=800&q=80" alt="Animal 1">
+    <img src="https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?auto=format&fit=crop&w=800&q=80" alt="Animal 2">
+    <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80" alt="Animal 3">
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">×</span>
+    <img id="lightbox-img" src="" alt="Enlarged Image" />
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const galleries = document.querySelectorAll(".gallery");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+
+    function showGallery(id) {
+      galleries.forEach(gallery => gallery.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+
+      tabs.forEach(tab => tab.classList.remove("active"));
+      document.querySelector(`button[onclick="showGallery('${id}')"]`).classList.add("active");
+    }
+
+    document.querySelectorAll(".gallery img").forEach(img => {
+      img.addEventListener("click", () => {
+        lightboxImg.src = img.src;
+        lightbox.style.display = "flex";
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+    }
+
+    lightbox.addEventListener("click", (e) => {
+      if (e.target !== lightboxImg) closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
